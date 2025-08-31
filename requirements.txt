@@ -1,9 +1,7 @@
-playwright
-nest_asyncio
 bs4
 requests
 dotenv
-apify-client
 scrapingbee
 selenium
 load_dotenv
+groq
