@@ -21,7 +21,7 @@ def get_linkedin_jobs(Role, Location):
 	
 	response = requests.get(url, params=params)
 
-	with open('Data/linkedin_jobs.json', 'w') as f:
+	with open('Data/linkedin_jobs.json', 'w', encoding="utf-8") as f:
 		json.dump(response.json(), f, indent=4)
 	
 	if response.status_code == 200:
