@@ -1,7 +1,8 @@
-bs4
-requests
 dotenv
-scrapingbee
-selenium
 load_dotenv
-groq
+groq 
+langchain_community
+Pinecone
+langchain_pinecone
+sentence-transformers 
+huggingface-hub
