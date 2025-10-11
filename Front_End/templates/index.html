@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Matcher - Find Your Perfect Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>AI Job Matcher</h1>
+            </div>
+            <p class="tagline">Upload your CV and let AI find your perfect match</p>
+            <a href="/saved_jobs" class="saved-jobs-link">Saved Jobs</a>
+        </header>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-container">
+                <div class="upload-box" id="uploadBox">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Upload Your CV</h3>
+                    <p>Drag & drop your CV here or click to browse</p>
+                    <p class="file-info">Supports PDF, DOC, DOCX (Max 16MB)</p>
+                    <input type="file" id="cvFile" accept=".pdf,.doc,.docx" hidden>
+                    <button class="browse-btn" id="browseBtn">
+                        <i class="fas fa-folder-open"></i> Browse Files
+                    </button>
+                </div>
+                
+                <div class="file-preview" id="filePreview" style="display: none;">
+                    <div class="file-details">
+                        <i class="fas fa-file-pdf file-icon"></i>
+                        <div class="file-text">
+                            <p class="file-name" id="fileName"></p>
+                            <p class="file-size" id="fileSize"></p>
+                        </div>
+                        <button class="remove-btn" id="removeBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button class="analyze-btn" id="analyzeBtn">
+                        <i class="fas fa-magic"></i> Analyze CV & Match Jobs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing your CV and matching jobs...</p>
+                <p class="loading-subtext">This may take a few moments</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="results-header">
+                <h2><i class="fas fa-briefcase"></i> Top Matches for You</h2>
+                <p class="results-count" id="resultsCount"></p>
+            </div>
+
+            <!-- Job Cards Grid -->
+            <div class="jobs-grid" id="jobsGrid"></div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <p id="errorText"></p>
+            <button class="retry-btn" id="retryBtn">Try Again</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

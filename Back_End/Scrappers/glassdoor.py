@@ -23,6 +23,6 @@ def glassdoor_data(Role):
 
     response = requests.get(url, headers=headers, params=querystring)
 
-    with open('../Data/glassdoor.json', 'w', encoding="utf-8") as f:
+    with open('../../Retrieved_Data/glassdoor.json', 'w', encoding="utf-8") as f:
         json.dump(response.json(), f, indent=4)
 

@@ -28,6 +28,6 @@ def indeed_data(role):
 
 	response = requests.post(url, json=payload, headers=headers)
 
-	with open('../Data/indeed.json', 'w', encoding="utf-8") as f:
+	with open('../../Retrieved_Data/indeed.json', 'w', encoding="utf-8") as f:
 		json.dump(response.json(), f, indent=4)
 

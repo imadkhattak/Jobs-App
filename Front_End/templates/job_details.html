@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Job Details</h1>
+            </div>
+            <a href="/" class="saved-jobs-link">Back to Home</a>
+        </header>
+
+        <div class="results-section">
+            <p>Job ID: {{ job_id }}</p>
+            <!-- Job details will be displayed here -->
+        </div>
+    </div>
+</body>
+</html>

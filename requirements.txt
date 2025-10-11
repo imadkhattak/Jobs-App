@@ -1,8 +1,5 @@
 dotenv
 load_dotenv
-groq 
 langchain_community
-Pinecone
-langchain_pinecone
-sentence-transformers 
-huggingface-hub
+ollama
+flask

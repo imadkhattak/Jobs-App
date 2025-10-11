@@ -22,6 +22,6 @@ def get_linkedin_jobs(Role):
 	
 	response = requests.get(url, params=params)
 
-	with open('Data/linkedin_jobs.json', 'w', encoding="utf-8") as f:
+	with open('../../Retrieved_Data/linkedin_jobs.json', 'w', encoding="utf-8") as f:
 		json.dump(response.json(), f, indent=4)
 	
