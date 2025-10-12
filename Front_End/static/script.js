@@ -165,7 +165,7 @@ function createJobCard(job) {
     card.innerHTML = `
         <div class="job-header">
             <div>
-                <h3 class="job-title">${job['Job Title'] || 'N/A'}</h3>
+                <h3 class="job-title">${job['Title'] || 'N/A'}</h3>
                 <div class="company-name">
                     <i class="fas fa-building"></i>
                     ${job['Company'] || 'N/A'}
@@ -185,8 +185,8 @@ function createJobCard(job) {
             </div>
         </div>
         <div class="job-card-buttons">
-            <a href="${job['Job Link'] || '#'}" target="_blank" class="apply-btn">Apply Now</a>
-            <button class="save-job-btn" data-job-title="${job['Job Title']}" data-job-company="${job['Company']}">Save Job</button>
+            <a href="${job['Link'] || '#'}" target="_blank" class="apply-btn">Apply Now</a>
+            <button class="save-job-btn" data-job-title="${job['Title']}" data-job-company="${job['Company']}">Save Job</button>
         </div>
     `;
 
@@ -230,7 +230,7 @@ document.addEventListener('click', (e) => {
     if (e.target.classList.contains('save-job-btn')) {
         const jobTitle = e.target.dataset.jobTitle;
         const jobCompany = e.target.dataset.jobCompany;
-        const job = jobs.find(j => j['Job Title'] === jobTitle && j['Company'] === jobCompany);
+        const job = jobs.find(j => j['Title'] === jobTitle && j['Company'] === jobCompany);
         if (job) {
             saveJob(job);
         }
