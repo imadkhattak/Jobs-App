@@ -20,27 +20,33 @@ def explain_matching_jobs(cv_info, all_jobs):
     prompt = PromptTemplate(
         input_variables=["cv_info", "jobs"],
         template=(
-            "You are an AI career coach.\n\n"
+            "You are an AI career coach that ONLY outputs valid JSON.\n\n"
             "Candidate Profile:\n{cv_info}\n\n"
             "Job Postings:\n{jobs}\n\n"
             "Task:\n"
             "- Identify the top 15 most relevant jobs for this candidate.\n"
             "- Compare job descriptions with candidate skills and projects.\n"
-            "- Return only JSON with this schema:\n"
+            "- Return ONLY a valid JSON array with this EXACT structure:\n\n"
             "[\n"
             "  {{\n"
-            "    'Job Title': str,\n"
-            "    'Company': str,\n"
-            "    'Relevance Score': int (0–100),\n"
-            "    'Missing Skills': [str],\n"
-            "    'Link': str,\n"
-            "    'Salary': str\n"
+            '    "Job Title": "string",\n'
+            '    "Company": "string",\n'
+            '    "Relevance Score": 85,\n'
+            '    "Missing Skills": ["skill1", "skill2"],\n'
+            '    "Link": "string",\n'
+            '    "Salary": "string"\n'
             "  }}\n"
-            "]\n"
-            "No markdown, explanations, or prose — only valid JSON."
+            "]\n\n"
+            "CRITICAL RULES:\n"
+            "- Use DOUBLE QUOTES for all keys and string values\n"
+            "- NO markdown, NO explanations, NO text before or after the JSON\n"
+            "- Start with [ and end with ]\n"
+            "- Relevance Score must be a number between 0-100\n"
+            "- Missing Skills must be an array (use [] if no missing skills)\n"
         )
     )
 
+    
     final_prompt = prompt.format(
         cv_info=json.dumps(cv_info, indent=2),
         jobs=jobs_text
