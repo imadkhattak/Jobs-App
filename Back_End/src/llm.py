@@ -1,8 +1,8 @@
 import os
 import json
 import ollama
-from langchain.prompts import PromptTemplate
-from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.prompts import PromptTemplate
+
 
 
 # Stage 1: Explain matching jobs
@@ -49,7 +49,7 @@ def explain_matching_jobs(cv_info, all_jobs):
     )
 
     response = ollama.chat(
-        model="llama3.1:8b",
+        model="llama3:latest",
         messages=[
             {"role": "system", "content": "You are a JSON-only AI job matching system."},
             {"role": "user", "content": final_prompt},

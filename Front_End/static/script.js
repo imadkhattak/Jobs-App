@@ -165,9 +165,9 @@ function populateJobCard(card, job) {
     const score = job['Relevance Score'] || 0;
     const scoreClass = score >= 70 ? 'score-high' : score >= 40 ? 'score-medium' : 'score-low';
 
-    const missingSkills = job['Missing Skills'] || [];
-    const skillsHTML = missingSkills.length > 0
-        ? missingSkills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+    const validMissingSkills = (job['Missing Skills'] || []).filter(skill => skill);
+    const skillsHTML = validMissingSkills.length > 0
+        ? validMissingSkills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
         : '<span class="no-missing-skills"><i class="fas fa-check-circle"></i> All skills matched!</span>';
 
     let salaryHTML = '';
@@ -191,7 +191,7 @@ function populateJobCard(card, job) {
         ${salaryHTML}
         <div class="skills-section">
             <span class="skills-label">
-                ${missingSkills.length > 0 ? 'Missing Skills:' : 'Match Status:'}
+                ${validMissingSkills.length > 0 ? 'Missing Skills:' : 'Match Status:'}
             </span>
             <div class="skills-list">
                 ${skillsHTML}
