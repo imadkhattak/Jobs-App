@@ -3,71 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saved Jobs</title>
+    <title>Saved Jobs - AI Job Matcher</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header class="header">
             <div class="logo">
-                <i class="fas fa-brain"></i>
+                <i class="fas fa-save"></i>
                 <h1>Saved Jobs</h1>
             </div>
-            <a href="/" class="saved-jobs-link">Back to Home</a>
+            <p class="tagline">Here are the jobs you saved for later</p>
+            <a href="/" class="saved-jobs-link">Back to Search</a>
         </header>
 
+        <!-- Results Section -->
         <div class="results-section" id="resultsSection">
-            <div class="jobs-grid" id="jobsGrid">
-                {% if saved_jobs %}
-                    {% for job in saved_jobs %}
-                        <div class="job-card">
-                            <div class="job-header">
-                                <div>
-                                    <h3 class="job-title">{{ job['Job Title'] or 'N/A' }}</h3>
-                                    <div class="company-name">
-                                        <i class="fas fa-building"></i>
-                                        {{ job['Company'] or 'N/A' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="salary">
-                                <i class="fas fa-dollar-sign"></i>
-                                {{ job['Salary'] or 'N/A' }}
-                            </div>
-                            <div class="job-card-buttons">
-                                <a href="{{ job['Job Link'] or '#' }}" target="_blank" class="apply-btn">Apply Now</a>
-                                <button class="remove-job-btn" data-job-title="{{ job['Job Title'] }}" data-job-company="{{ job['Company'] }}">Remove Job</button>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p>You haven't saved any jobs yet.</p>
-                {% endif %}
+            <div class="results-header">
+                <h2><i class="fas fa-briefcase"></i> Your Saved Jobs</h2>
+                <p class="results-count" id="resultsCount"></p>
             </div>
+
+            <!-- Job Cards Grid -->
+            <div class="jobs-grid" id="jobsGrid"></div>
         </div>
     </div>
+
     <script>
-        document.addEventListener('click', async (e) => {
-            if (e.target.classList.contains('remove-job-btn')) {
-                const jobTitle = e.target.dataset.jobTitle;
-                const jobCompany = e.target.dataset.jobCompany;
-                
-                const response = await fetch('/remove_job', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 'Job Title': jobTitle, 'Company': jobCompany })
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/get_saved_jobs')
+                .then(response => response.json())
+                .then(data => {
+                    const jobsGrid = document.getElementById('jobsGrid');
+                    const resultsCount = document.getElementById('resultsCount');
+                    if (data.saved_jobs && data.saved_jobs.length > 0) {
+                        resultsCount.textContent = `You have ${data.saved_jobs.length} saved jobs`;
+                        data.saved_jobs.forEach(job => {
+                            const card = createJobCard(job);
+                            jobsGrid.appendChild(card);
+                        });
+                    } else {
+                        resultsCount.textContent = 'You have no saved jobs yet.';
+                    }
                 });
 
-                const data = await response.json();
+            function createJobCard(job) {
+                const card = document.createElement('div');
+                card.className = 'job-card';
 
-                if (data.success) {
-                    // Reload the page to show the updated list of saved jobs
-                    location.reload();
-                } else {
-                    alert('Failed to remove job: ' + data.error);
+                const score = job['Relevance Score'] || 0;
+                const scoreClass = score >= 70 ? 'score-high' : score >= 40 ? 'score-medium' : 'score-low';
+
+                const missingSkills = job['Missing Skills'] || [];
+                const skillsHTML = missingSkills.length > 0
+                    ? missingSkills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')
+                    : '<span class="no-missing-skills"><i class="fas fa-check-circle"></i> All skills matched!</span>';
+
+                let salaryHTML = '';
+                if (job['Salary']) {
+                    salaryHTML = `<div class="salary"><i class="fas fa-dollar-sign"></i> ${job['Salary']}</div>`;
                 }
+
+                card.innerHTML = `
+                    <div class="job-header">
+                        <div>
+                            <h3 class="job-title">${job['Job Title'] || 'N/A'}</h3>
+                            <div class="company-name">
+                                <i class="fas fa-building"></i>
+                                ${job['Company'] || 'N/A'}
+                            </div>
+                        </div>
+                        <div class="score-badge ${scoreClass}">
+                            ${score}%
+                        </div>
+                    </div>
+                    ${salaryHTML}
+                    <div class="skills-section">
+                        <span class="skills-label">
+                            ${missingSkills.length > 0 ? 'Missing Skills:' : 'Match Status:'}
+                        </span>
+                        <div class="skills-list">
+                            ${skillsHTML}
+                        </div>
+                    </div>
+                    <div class="job-card-buttons">
+                        <a href="${job['Link'] || '#'}" target="_blank" class="apply-btn">Apply Now</a>
+                    </div>
+                `;
+
+                return card;
             }
         });
     </script>

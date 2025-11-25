@@ -62,6 +62,24 @@ body {
     margin-top: 0.5rem;
 }
 
+.saved-jobs-link {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.saved-jobs-link:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
 /* Upload Section */
 .upload-section {
     background: white;
@@ -275,15 +293,15 @@ body {
 /* Jobs Grid */
 .jobs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
 }
 
 .job-card {
     background: white;
     border: 2px solid var(--border);
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: 2rem;
     transition: all 0.3s ease;
     cursor: pointer;
     position: relative;
@@ -403,6 +421,43 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+.job-card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+}
+
+.apply-btn, .save-job-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.apply-btn:hover, .save-job-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.save-job-btn {
+    background: var(--light);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.save-job-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
 .error-message i {
     font-size: 3rem;
     color: var(--danger);
@@ -432,7 +487,103 @@ body {
     transform: translateY(-2px);
 }
 
-/* Responsive */
+.job-card.skeleton {
+    cursor: default;
+    pointer-events: none;
+}
+
+.job-card.skeleton:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+}
+
+.job-card.skeleton::before {
+    display: none;
+}
+
+.job-card.skeleton .job-header,
+.job-card.skeleton .skills-section,
+.job-card.skeleton .job-card-buttons {
+    opacity: 1;
+}
+
+.job-card.skeleton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    z-index: 10;
+}
+
+.job-card.skeleton > * {
+    position: relative;
+    z-index: 20;
+}
+
+.job-card.skeleton .job-title,
+.job-card.skeleton .company-name,
+.job-card.skeleton .score-badge,
+.job-card.skeleton .skills-label,
+.job-card.skeleton .skill-tag,
+.job-card.skeleton .apply-btn,
+.job-card.skeleton .save-job-btn {
+    background: #e0e0e0;
+    color: transparent;
+    border-radius: 0.25rem;
+    user-select: none;
+}
+
+.job-card.skeleton .job-title {
+    width: 70%;
+    height: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.job-card.skeleton .company-name {
+    width: 50%;
+    height: 1rem;
+}
+
+.job-card.skeleton .score-badge {
+    width: 50px;
+    height: 24px;
+}
+
+.job-card.skeleton .skills-label {
+    width: 100px;
+    height: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.job-card.skeleton .skills-list {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.job-card.skeleton .skill-tag {
+    width: 80px;
+    height: 24px;
+}
+
+.job-card.skeleton .job-card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+}
+
+.job-card.skeleton .apply-btn,
+.job-card.skeleton .save-job-btn {
+    width: 100px;
+    height: 36px;
+}
+
 @media (max-width: 768px) {
     body {
         padding: 1rem 0.5rem;

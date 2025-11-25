@@ -125,8 +125,8 @@ let jobs = [];
 // Display Results
 function displayResults(jobData) {
     jobs = jobData;
-    jobsGrid.innerHTML = '';
-    
+    const skeletonCards = jobsGrid.querySelectorAll('.job-card.skeleton');
+
     if (!jobs || jobs.length === 0) {
         showError('No matching jobs found. Please try with a different CV.');
         return;
@@ -135,20 +135,33 @@ function displayResults(jobData) {
     resultsCount.textContent = `Found ${jobs.length} matching opportunities`;
     resultsSection.style.display = 'block';
 
-    jobs.forEach(job => {
-        const card = createJobCard(job);
-        jobsGrid.appendChild(card);
+    jobs.forEach((job, index) => {
+        if (index < skeletonCards.length) {
+            // Populate existing skeleton cards
+            const card = skeletonCards[index];
+            populateJobCard(card, job);
+            card.classList.remove('skeleton');
+        } else {
+            // Create new cards if jobs exceed skeleton cards
+            const card = createJobCard(job);
+            jobsGrid.appendChild(card);
+        }
     });
+
+    // Hide unused skeleton cards
+    if (jobs.length < skeletonCards.length) {
+        for (let i = jobs.length; i < skeletonCards.length; i++) {
+            skeletonCards[i].style.display = 'none';
+        }
+    }
 
     // Scroll to results
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Create Job Card
-function createJobCard(job) {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-
+// Populate Job Card
+function populateJobCard(card, job) {
+    card.innerHTML = ''; // Clear skeleton structure
     const score = job['Relevance Score'] || 0;
     const scoreClass = score >= 70 ? 'score-high' : score >= 40 ? 'score-medium' : 'score-low';
 
@@ -165,7 +178,7 @@ function createJobCard(job) {
     card.innerHTML = `
         <div class="job-header">
             <div>
-                <h3 class="job-title">${job['Title'] || 'N/A'}</h3>
+                <h3 class="job-title">${job['Job Title'] || 'N/A'}</h3>
                 <div class="company-name">
                     <i class="fas fa-building"></i>
                     ${job['Company'] || 'N/A'}
@@ -186,7 +199,7 @@ function createJobCard(job) {
         </div>
         <div class="job-card-buttons">
             <a href="${job['Link'] || '#'}" target="_blank" class="apply-btn">Apply Now</a>
-            <button class="save-job-btn" data-job-title="${job['Title']}" data-job-company="${job['Company']}">Save Job</button>
+            <button class="save-job-btn" data-job-title="${job['Job Title']}" data-job-company="${job['Company']}">Save Job</button>
         </div>
     `;
 
@@ -199,7 +212,13 @@ function createJobCard(job) {
             }, 200);
         }
     });
+}
 
+// Create Job Card
+function createJobCard(job) {
+    const card = document.createElement('div');
+    card.className = 'job-card';
+    populateJobCard(card, job);
     return card;
 }
 
@@ -230,7 +249,7 @@ document.addEventListener('click', (e) => {
     if (e.target.classList.contains('save-job-btn')) {
         const jobTitle = e.target.dataset.jobTitle;
         const jobCompany = e.target.dataset.jobCompany;
-        const job = jobs.find(j => j['Title'] === jobTitle && j['Company'] === jobCompany);
+        const job = jobs.find(j => j['Job Title'] === jobTitle && j['Company'] === jobCompany);
         if (job) {
             saveJob(job);
         }

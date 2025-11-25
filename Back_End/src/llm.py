@@ -1,12 +1,8 @@
-# src/processing/LLM.py
-
 import os
 import json
 import ollama
 from langchain.prompts import PromptTemplate
 from langchain.schema import HumanMessage, SystemMessage
-
-
 
 
 # Stage 1: Explain matching jobs
@@ -74,5 +70,6 @@ def explain_matching_jobs(cv_info, all_jobs):
                 return json.loads(raw[start:end+1])
             except:
                 pass
-        return {"raw_output": raw}
+        print(f"LLM output that failed to parse:\n{raw}")
+        raise ValueError("LLM returned invalid JSON that could not be recovered.")
 
